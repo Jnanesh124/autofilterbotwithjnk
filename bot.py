@@ -35,31 +35,20 @@ loop = asyncio.get_event_loop()
 
 
 async def start():
-    print('\n')
-    print('Initalizing Your Bot')
-    bot_info = await TechVJBot.get_me()
-    await initialize_clients()
-    for name in files:
-        with open(name) as a:
-            patt = Path(a.name)
-            plugin_name = patt.stem.replace(".py", "")
-            plugins_dir = Path(f"plugins/{plugin_name}.py")
-            import_path = "plugins.{}".format(plugin_name)
-            spec = importlib.util.spec_from_file_location(import_path, plugins_dir)
-            load = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(load)
-            sys.modules["plugins." + plugin_name] = load
-            print("Tech VJ Imported => " + plugin_name)
-    if ON_HEROKU:
-        asyncio.create_task(ping_server())
+    print(script.LOGO)
     b_users, b_chats = await db.get_banned()
     temp.BANNED_USERS = b_users
     temp.BANNED_CHATS = b_chats
-    me = await TechVJBot.get_me()
-    temp.BOT = TechVJBot
-    temp.ME = me.id
-    temp.U_NAME = me.username
-    temp.B_NAME = me.first_name
+
+    # Initialize filtered words system
+    from database.filtered_words_db import initialize_filtered_words
+    await initialize_filtered_words()
+
+    await TechVJBot.start()
+    bot = await TechVJBot.get_me()
+    temp.ME = bot.id
+    temp.U_NAME = bot.username
+    temp.B_NAME = bot.first_name
     logging.info(script.LOGO)
     tz = pytz.timezone('Asia/Kolkata')
     today = date.today()
@@ -96,4 +85,3 @@ if __name__ == '__main__':
         loop.run_until_complete(start())
     except KeyboardInterrupt:
         logging.info('Service Stopped Bye 👋')
-

@@ -3132,10 +3132,9 @@ SPELL_CHECK = {}
 @Client.on_message(filters.group & filters.text & filters.incoming)
 async def give_filter(client, message):
     if message.chat.id != SUPPORT_CHAT_ID:
-        # Check for special characters and links - ignore if found
-        content = message.text.lower()
-        special_chars = ['.', ',', '@', '!', '#', '$', '%', '^', '&', '*', '(', ')', 'http', 'www.', 't.me', 'telegram.me']
-        if any(char in content for char in special_chars):
+        # Check if message should be ignored using filtered words system
+        from database.filtered_words_db import should_ignore_message
+        if await should_ignore_message(message.text):
             return
 
         settings = await get_settings(message.chat.id)
@@ -3183,10 +3182,9 @@ async def pm_text(bot, message):
     user_id = message.from_user.id
     if content.startswith("/") or content.startswith("#"): return  # ignore commands and hashtags
 
-    # Check for special characters and links - ignore if found
-    content_lower = content.lower()
-    special_chars = ['.', ',', '@', '!', '#', '$', '%', '^', '&', '*', '(', ')', 'http', 'www.', 't.me', 'telegram.me']
-    if any(char in content_lower for char in special_chars):
+    # Check if message should be ignored using filtered words system
+    from database.filtered_words_db import should_ignore_message
+    if await should_ignore_message(content):
         return
 
     if PM_SEARCH == True:

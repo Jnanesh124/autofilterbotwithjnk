@@ -82,7 +82,7 @@ async def start(client, message):
             parse_mode=enums.ParseMode.HTML
         )
         return
-    
+
     if AUTH_CHANNEL and not await is_subscribed(client, message):
         try:
             if REQUEST_TO_JOIN_MODE == True:
@@ -127,7 +127,7 @@ async def start(client, message):
         except Exception as e:
             print(e)
             return await message.reply_text("something wrong with force subscribe.")
-            
+
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         if PREMIUM_AND_REFERAL_MODE == True:
             buttons = [[
@@ -267,7 +267,7 @@ async def start(client, message):
                     reply_markup = InlineKeyboardMarkup(button)
                 else:
                     reply_markup = None
-                    
+
                 msg = await client.send_cached_media(
                     chat_id=message.from_user.id,
                     file_id=msg.get("file_id"),
@@ -276,7 +276,7 @@ async def start(client, message):
                     reply_markup=reply_markup
                 )
                 filesarr.append(msg)
-                
+
             except FloodWait as e:
                 await asyncio.sleep(e.value)
                 msg = await client.send_cached_media(
@@ -297,7 +297,7 @@ async def start(client, message):
             await x.delete()
         await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")  
         return
-    
+
     elif data.split("-", 1)[0] == "DSTORE":
         sts = await message.reply("<b>ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ...</b>")
         b_string = data.split("-", 1)[1]
@@ -328,7 +328,7 @@ async def start(client, message):
                     fileName = {quote_plus(get_name(log_msg))}
                     stream = f"{URL}watch/{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
                     download = f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
- 
+
                 if STREAM_MODE == True:
                     button = [[
                         InlineKeyboardButton("• ᴅᴏᴡɴʟᴏᴀᴅ •", url=download),
@@ -380,7 +380,7 @@ async def start(client, message):
             await verify_user(client, userid, token)
         else:
             return await message.reply_text(text="<b>ɪɴᴠᴀʟɪᴅ ʟɪɴᴋ ᴏʀ ᴇxᴘɪʀᴇᴅ ʟɪɴᴋ</b>", protect_content=True)
-            
+
     if data.startswith("sendfiles"):
         chat_id = int("-" + file_id.split("-")[1])
         userid = message.from_user.id if message.from_user else None
@@ -399,8 +399,8 @@ async def start(client, message):
         await asyncio.sleep(300)
         await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
         return
-        
-    
+
+
     elif data.startswith("short"):
         user = message.from_user.id
         chat_id = temp.SHORT.get(user)
@@ -419,7 +419,7 @@ async def start(client, message):
         await asyncio.sleep(1200)
         await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
         return
-        
+
     elif data.startswith("all"):
         files = temp.GETALL.get(file_id)
         if not files:
@@ -473,7 +473,7 @@ async def start(client, message):
             await x.delete()
         await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
         return    
-        
+
     elif data.startswith("files"):
         user = message.from_user.id
         if temp.SHORT.get(user)==None:
@@ -594,7 +594,7 @@ async def start(client, message):
     await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴀɢᴀɪɴ ᴛʜᴇɴ ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ</b>",reply_markup=InlineKeyboardMarkup(btn))
     return   
 
-@Client.on_message(filters.command('channel') & filters.user(ADMINS))
+@Client.on_message(filters.command("channel") & filters.user(ADMINS))
 async def channel_info(bot, message):
     text = '📑 **Indexed channels/groups**\n'
     for channel in CHANNELS:
@@ -616,14 +616,14 @@ async def channel_info(bot, message):
         os.remove(file)
 
 
-@Client.on_message(filters.command('logs') & filters.user(ADMINS))
+@Client.on_message(filters.command("logs") & filters.user(ADMINS))
 async def log_file(bot, message):
     try:
         await message.reply_document('TELEGRAM BOT.LOG')
     except Exception as e:
         await message.reply(str(e))
 
-@Client.on_message(filters.command('delete') & filters.user(ADMINS))
+@Client.on_message(filters.command("delete") & filters.user(ADMINS))
 async def delete(bot, message):
     reply = await bot.ask(message.from_user.id, "Now Send Me Media Which You Want to delete")
     if reply.media:
@@ -639,7 +639,7 @@ async def delete(bot, message):
     else:
         await msg.edit('This is not supported file format')
         return
-    
+
     try:
         file_id, file_ref = unpack_new_file_id(media.file_id)
     except ValueError:
@@ -662,7 +662,7 @@ async def delete(bot, message):
         for char in unwanted_chars:
             file_name = file_name.replace(char, '')
         file_name = ' '.join(filter(lambda x: not x.startswith('@'), file_name.split()))
-    
+
         result = col.delete_many({
             'file_name': file_name,
             'file_size': media.file_size
@@ -715,7 +715,7 @@ async def delete_all_index_confirm(bot, query):
     await query.message.edit('Succesfully Deleted All The Indexed Files.')
 
 
-@Client.on_message(filters.command('settings'))
+@Client.on_message(filters.command("settings"))
 async def settings(client, message):
     userid = message.from_user.id if message.from_user else None
     if not userid:
@@ -750,7 +750,7 @@ async def settings(client, message):
             and str(userid) not in ADMINS
     ):
         return
-    
+
     settings = await get_settings(grp_id)
 
     try:
@@ -959,7 +959,7 @@ async def requests(bot, message):
         except Exception as e:
             await message.reply_text(f"Error: {e}")
             pass
-        
+
     elif message.text:
         chat_id = message.chat.id
         reporter = str(message.from_user.id)
@@ -997,7 +997,7 @@ async def requests(bot, message):
 
     else:
         success = False
-    
+
     if success:
         link = await bot.create_chat_invite_link(int(REQST_CHANNEL))
         btn = [[
@@ -1005,7 +1005,7 @@ async def requests(bot, message):
             InlineKeyboardButton('View Request', url=f"{reported_post.link}")
         ]]
         await message.reply_text("<b>Your request has been added! Please wait for some time.\n\nJoin Channel First & View Request</b>", reply_markup=InlineKeyboardMarkup(btn))
-    
+
 @Client.on_message(filters.command("send") & filters.user(ADMINS))
 async def send_msg(bot, message):
     if message.reply_to_message:
@@ -1066,7 +1066,7 @@ async def shortlink(bot, message):
         return await message.reply(f"You are anonymous admin. Turn off anonymous admin and try again this command")
     chat_type = message.chat.type
     if chat_type == enums.ChatType.PRIVATE:
-        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This command only works on groups !\n\n<u>Follow These Steps to Connect Shortener:</u>\n\n1. Add Me in Your Group with Full Admin Rights\n\n2. After Adding in Grp, Set your Shortener\n\nSend this command in your group\n\n—> /shortlink ""{your_shortener_website_name} {your_shortener_api}\n\n#Sample:-\n/shortlink kpslink.in CAACAgUAAxkBAAEJ4GtkyPgEzpIUC_DSmirN6eFWp4KInAACsQoAAoHSSFYub2D15dGHfy8E\n\nThat's it!!! Enjoy Earning Money 💲\n\n[[[ Trusted Earning Site - https://kpslink.in]]]\n\nIf you have any Doubts, Feel Free to Ask me - @kingvj01\n\n(Puriyala na intha contact la message pannunga - @kngvj01)</b>")
+        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This command only works on groups!\n\nTry this command in your own group, if you are using me in your group</b>")
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         grpid = message.chat.id
         title = message.chat.title
@@ -1090,7 +1090,7 @@ async def shortlink(bot, message):
     await save_group_settings(grpid, 'shortlink_api', api)
     await save_group_settings(grpid, 'is_shortlink', True)
     await reply.edit_text(f"<b>Successfully added shortlink API for {title}.\n\nCurrent Shortlink Website: <code>{shortlink_url}</code>\nCurrent API: <code>{api}</code></b>")
-    
+
 @Client.on_message(filters.command("setshortlinkoff"))
 async def offshortlink(bot, message):
     chat_type = message.chat.type
@@ -1110,7 +1110,7 @@ async def offshortlink(bot, message):
     await save_group_settings(grpid, 'is_shortlink', False)
     # ENABLE_SHORTLINK = False
     return await message.reply_text("Successfully disabled shortlink")
-    
+
 @Client.on_message(filters.command("setshortlinkon"))
 async def onshortlink(bot, message):
     chat_type = message.chat.type
@@ -1168,7 +1168,7 @@ async def showshortlink(bot, message):
             return await message.reply_text(f"<b>Tutorial: <code>{st}</code>\n\nShortener Url Not Connected\n\nYou can Connect Using /shortlink command</b>")
         else:
             return await message.reply_text("Shortener url and Tutorial Link Not Connected. Check this commands, /shortlink and /set_tutorial")
-        
+
 
 @Client.on_message(filters.command("set_tutorial"))
 async def settutorial(bot, message):
@@ -1290,7 +1290,7 @@ async def fsub(client, message):
         channels += f'{chat.title}\n'
     await save_group_settings(grpid, 'fsub', fsub_ids)
     await message.reply_text(f"<b>Successfully set force channels for {title} to\n\n{channels}\n\nYou can remove it by /nofsub.</b>")
-        
+
 
 @Client.on_message(filters.command("add_premium"))
 async def give_premium_cmd_handler(client, message):
@@ -1317,7 +1317,7 @@ async def give_premium_cmd_handler(client, message):
             await message.reply_text("Invalid time format. Please use '1day for days', '1hour for hours', or '1min for minutes', or '1month for months' or '1year for year'")
     else:
         await message.reply_text("<b>Usage: /add_premium user_id time \n\nExample /add_premium 1252789 10day \n\n(e.g. for time units '1day for days', '1hour for hours', or '1min for minutes', or '1month for months' or '1year for year')</b>")
-        
+
 @Client.on_message(filters.command("remove_premium"))
 async def remove_premium_cmd_handler(client, message):
     if PREMIUM_AND_REFERAL_MODE == False:
@@ -1344,7 +1344,7 @@ async def remove_premium_cmd_handler(client, message):
             await message.reply_text("Invalid time format.'")
     else:
         await message.reply_text("Usage: /remove_premium user_id")
-        
+
 @Client.on_message(filters.command("plan"))
 async def plans_cmd_handler(client, message): 
     if PREMIUM_AND_REFERAL_MODE == False:
@@ -1359,7 +1359,7 @@ async def plans_cmd_handler(client, message):
         caption=PAYMENT_TEXT,
         reply_markup=reply_markup
     )
-        
+
 @Client.on_message(filters.command("myplan"))
 async def check_plans_cmd(client, message):
     if PREMIUM_AND_REFERAL_MODE == False:
@@ -1400,3 +1400,88 @@ async def purge_requests(client, message):
             parse_mode=enums.ParseMode.MARKDOWN,
             disable_web_page_preview=True
         )
+
+@Client.on_message(filters.command("addword") & filters.private)
+async def add_word(client, message):
+    """Add a word to the filter list"""
+    if message.from_user.id not in ADMINS:
+        return await message.reply_text("❌ This command is only for administrators.")
+
+    try:
+        word = message.text.split(" ", 1)[1]
+    except IndexError:
+        return await message.reply_text("❌ Please provide a word to add.\nFormat: `/addword <word>`")
+
+    if await db.add_filtered_word(word.lower()):
+        await message.reply_text(f"✅ Word '{word}' added to the filter list.")
+    else:
+        await message.reply_text(f"⚠️ Word '{word}' is already in the filter list.")
+
+@Client.on_message(filters.command("rmword") & filters.private)
+async def remove_word(client, message):
+    """Remove a word from the filter list"""
+    if message.from_user.id not in ADMINS:
+        return await message.reply_text("❌ This command is only for administrators.")
+
+    try:
+        word = message.text.split(" ", 1)[1]
+    except IndexError:
+        return await message.reply_text("❌ Please provide a word to remove.\nFormat: `/rmword <word>`")
+
+    if await db.remove_filtered_word(word.lower()):
+        await message.reply_text(f"✅ Word '{word}' removed from the filter list.")
+    else:
+        await message.reply_text(f"⚠️ Word '{word}' not found in the filter list.")
+
+@Client.on_message(filters.command("listwords") & filters.private)
+async def list_words(client, message):
+    """Show all filtered words"""
+    if message.from_user.id not in ADMINS:
+        return await message.reply_text("❌ This command is only for administrators.")
+
+    filtered_words = await db.get_all_filtered_words()
+    if not filtered_words:
+        await message.reply_text("📭 The filter list is currently empty.")
+    else:
+        words_list = "\n".join([f"• {word}" for word in filtered_words])
+        await message.reply_text(f"**Filter List:**\n\n{words_list}", quote=True)
+
+@Client.on_message(filters.command("resetwords") & filters.private)
+async def reset_words(client, message):
+    """Reset filtered words to default"""
+    if message.from_user.id not in ADMINS:
+        return await message.reply_text("❌ This command is only for administrators.")
+
+    await db.reset_filtered_words()
+    await message.reply_text("✅ Filter list has been reset to default.")
+
+@Client.on_message(filters.command("help") & filters.private & ADMINS)
+async def filtered_words_help(client, message):
+    """Show help for filtered words commands"""
+    if message.from_user.id not in ADMINS:
+        return await message.reply_text("❌ This command is only for administrators.")
+
+    help_text = """
+🚫 **Filtered Words Management**
+
+**Commands for managing filtered words:**
+
+• `/addword <word>` - Add a word to filter list
+• `/rmword <word>` - Remove a word from filter list  
+• `/listwords` - Show all filtered words
+• `/resetwords` - Reset to default filtered words
+
+**Examples:**
+• `/addword @spamchannel`
+• `/addword cinevood`
+• `/rmword hq`
+
+**What gets filtered:**
+• Channel usernames (e.g., @jnk_backup)
+• Website names (e.g., cinevood, moviesflix)
+• Quality indicators (e.g., hq, hd, 720p)
+• Common spam words and links
+
+**Note:** Words are case-insensitive and will prevent auto-filter from processing messages containing them.
+"""
+    await message.reply_text(help_text, quote=True)
