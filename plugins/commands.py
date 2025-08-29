@@ -1412,7 +1412,8 @@ async def add_word(client, message):
     except IndexError:
         return await message.reply_text("❌ Please provide a word to add.\nFormat: `/addword <word>`")
 
-    if await db.add_filtered_word(word.lower()):
+    from database.filtered_words_db import add_filtered_word
+    if await add_filtered_word(word.lower()):
         await message.reply_text(f"✅ Word '{word}' added to the filter list.")
     else:
         await message.reply_text(f"⚠️ Word '{word}' is already in the filter list.")
@@ -1428,7 +1429,8 @@ async def remove_word(client, message):
     except IndexError:
         return await message.reply_text("❌ Please provide a word to remove.\nFormat: `/rmword <word>`")
 
-    if await db.remove_filtered_word(word.lower()):
+    from database.filtered_words_db import remove_filtered_word
+    if await remove_filtered_word(word.lower()):
         await message.reply_text(f"✅ Word '{word}' removed from the filter list.")
     else:
         await message.reply_text(f"⚠️ Word '{word}' not found in the filter list.")
@@ -1439,7 +1441,8 @@ async def list_words(client, message):
     if message.from_user.id not in ADMINS:
         return await message.reply_text("❌ This command is only for administrators.")
 
-    filtered_words = await db.get_all_filtered_words()
+    from database.filtered_words_db import get_all_filtered_words
+    filtered_words = await get_all_filtered_words()
     if not filtered_words:
         await message.reply_text("📭 The filter list is currently empty.")
     else:
@@ -1452,7 +1455,8 @@ async def reset_words(client, message):
     if message.from_user.id not in ADMINS:
         return await message.reply_text("❌ This command is only for administrators.")
 
-    await db.reset_filtered_words()
+    from database.filtered_words_db import reset_filtered_words
+    await reset_filtered_words()
     await message.reply_text("✅ Filter list has been reset to default.")
 
 @Client.on_message(filters.command("help") & filters.private & ADMINS)

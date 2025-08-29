@@ -3,39 +3,53 @@
 # Ask Doubt on telegram @KingVJ01
 
 import re
+import pymongo
+from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import DuplicateKeyError
-import motor.motor_asyncio
-from pymongo import MongoClient
-from info import DATABASE_NAME, USER_DB_URI, OTHER_DB_URI, CUSTOM_FILE_CAPTION, IMDB, IMDB_TEMPLATE, MELCOW_NEW_USERS, BUTTON_MODE, SPELL_CHECK_REPLY, PROTECT_CONTENT, AUTO_DELETE, MAX_BTN, AUTO_FFILTER, SHORTLINK_API, SHORTLINK_URL, SHORTLINK_MODE, TUTORIAL, IS_TUTORIAL
-import time
+from info import USER_DB_URI, DATABASE_NAME, PREMIUM_AND_REFERAL_MODE
+from pyrogram import enums
 import datetime
+import logging
+import asyncio
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.ERROR)
+
+# Database initialization - will be set in initialize_db()
+myclient = None
+mydb = None
+
+async def initialize_db():
+    global myclient, mydb
+    if myclient is None:
+        myclient = AsyncIOMotorClient(USER_DB_URI)
+        mydb = myclient[DATABASE_NAME]
 
 my_client = MongoClient(OTHER_DB_URI)
-mydb = my_client["referal_user"]
+mydb_referal = my_client["referal_user"]
 
 async def referal_add_user(user_id, ref_user_id):
-    user_db = mydb[str(user_id)]
+    user_db = mydb_referal[str(user_id)]
     user = {'_id': ref_user_id}
     try:
         user_db.insert_one(user)
         return True
     except DuplicateKeyError:
         return False
-    
+
 
 async def get_referal_all_users(user_id):
-    user_db = mydb[str(user_id)]
+    user_db = mydb_referal[str(user_id)]
     return user_db.find()
-    
+
 async def get_referal_users_count(user_id):
-    user_db = mydb[str(user_id)]
+    user_db = mydb_referal[str(user_id)]
     count = user_db.count_documents({})
     return count
-    
+
 
 async def delete_all_referal_users(user_id):
-    user_db = mydb[str(user_id)]
-    user_db.delete_many({}) 
+    user_db = mydb_referal[str(user_id)]
+    user_db.delete_many({})
 
 default_setgs = {
     'button': BUTTON_MODE,
@@ -58,55 +72,42 @@ default_setgs = {
 
 
 class Database:
-    
-    def __init__(self, uri, database_name):
-        self._client = motor.motor_asyncio.AsyncIOMotorClient(uri)
-        self.db = self._client[database_name]
-        self.col = self.db.users
-        self.grp = self.db.groups
-        self.users = self.db.uersz
-        self.bot = self.db.clone_bots
 
+    def __init__(self):
+        pass
 
-    def new_user(self, id, name):
-        return dict(
-            id = id,
-            name = name,
-            file_id=None,
-            caption=None,
-            message_command=None,
-            save=False,
+    async def _ensure_initialized(self):
+        await initialize_db()
+        if not hasattr(self, 'col'):
+            self.col = mydb.users
+            self.grp = mydb.groups
+            self.misc = mydb.misc
+            self.bot = mydb.bots
+
+    async def add_user(self, user_id, first_name):
+        await self._ensure_initialized()
+        user = dict(
+            id=user_id,
+            first_name=first_name,
             ban_status=dict(
                 is_banned=False,
                 ban_reason="",
             ),
         )
-
-
-    def new_group(self, id, title):
-        return dict(
-            id = id,
-            title = title,
-            chat_status=dict(
-                is_disabled=False,
-                reason="",
-            ),
-            settings=default_setgs
-        )
-    
-    async def add_user(self, id, name):
-        user = self.new_user(id, name)
         await self.col.insert_one(user)
-    
-    async def is_user_exist(self, id):
-        user = await self.col.find_one({'id':int(id)})
+
+    async def is_user_exist(self, user_id):
+        await self._ensure_initialized()
+        user = await self.col.find_one({'id': int(user_id)})
         return bool(user)
-    
+
     async def total_users_count(self):
+        await self._ensure_initialized()
         count = await self.col.count_documents({})
         return count
 
     async def add_clone_bot(self, bot_id, user_id, bot_token):
+        await self._ensure_initialized()
         settings = {
             'bot_id': bot_id,
             'bot_token': bot_token,
@@ -119,37 +120,46 @@ class Database:
         await self.bot.insert_one(settings)
 
     async def is_clone_exist(self, user_id):
+        await self._ensure_initialized()
         clone = await self.bot.find_one({'user_id': int(user_id)})
         return bool(clone)
 
     async def delete_clone(self, user_id):
+        await self._ensure_initialized()
         await self.bot.delete_many({'user_id': int(user_id)})
 
     async def get_clone(self, user_id):
+        await self._ensure_initialized()
         clone_data = await self.bot.find_one({"user_id": user_id})
         return clone_data
-            
+
     async def update_clone(self, user_id, user_data):
+        await self._ensure_initialized()
         await self.bot.update_one({"user_id": user_id}, {"$set": user_data}, upsert=True)
 
     async def get_bot(self, bot_id):
+        await self._ensure_initialized()
         bot_data = await self.bot.find_one({"bot_id": bot_id})
         return bot_data
-            
+
     async def update_bot(self, bot_id, bot_data):
+        await self._ensure_initialized()
         await self.bot.update_one({"bot_id": bot_id}, {"$set": bot_data}, upsert=True)
-    
+
     async def get_all_bots(self):
+        await self._ensure_initialized()
         return self.bot.find({})
-        
+
     async def remove_ban(self, id):
+        await self._ensure_initialized()
         ban_status = dict(
             is_banned=False,
             ban_reason=''
         )
         await self.col.update_one({'id': id}, {'$set': {'ban_status': ban_status}})
-    
+
     async def ban_user(self, user_id, ban_reason="No Reason"):
+        await self._ensure_initialized()
         ban_status = dict(
             is_banned=True,
             ban_reason=ban_reason
@@ -157,6 +167,7 @@ class Database:
         await self.col.update_one({'id': user_id}, {'$set': {'ban_status': ban_status}})
 
     async def get_ban_status(self, id):
+        await self._ensure_initialized()
         default = dict(
             is_banned=False,
             ban_reason=''
@@ -167,78 +178,100 @@ class Database:
         return user.get('ban_status', default)
 
     async def get_all_users(self):
+        await self._ensure_initialized()
         return self.col.find({})
-    
+
 
     async def delete_user(self, user_id):
+        await self._ensure_initialized()
         await self.col.delete_many({'id': int(user_id)})
 
 
     async def get_banned(self):
+        await self._ensure_initialized()
         users = self.col.find({'ban_status.is_banned': True})
         chats = self.grp.find({'chat_status.is_disabled': True})
-        b_chats = [chat['id'] async for chat in chats]
-        b_users = [user['id'] async for user in users]
+        b_chats = []
+        b_users = []
+
+        async for chat in chats:
+            b_chats.append(chat['id'])
+
+        async for user in users:
+            b_users.append(user['id'])
+
         return b_users, b_chats
-    
+
 
 
     async def add_chat(self, chat, title):
-        chat = self.new_group(chat, title)
-        await self.grp.insert_one(chat)
-    
+        await self._ensure_initialized()
+        chat_dict = self.new_group(chat, title)
+        await self.grp.insert_one(chat_dict)
+
 
     async def get_chat(self, chat):
-        chat = await self.grp.find_one({'id':int(chat)})
-        return False if not chat else chat.get('chat_status')
-    
+        await self._ensure_initialized()
+        chat_data = await self.grp.find_one({'id':int(chat)})
+        return False if not chat_data else chat_data.get('chat_status')
+
 
     async def re_enable_chat(self, id):
+        await self._ensure_initialized()
         chat_status=dict(
             is_disabled=False,
             reason="",
             )
         await self.grp.update_one({'id': int(id)}, {'$set': {'chat_status': chat_status}})
-        
+
     async def update_settings(self, id, settings):
+        await self._ensure_initialized()
         await self.grp.update_one({'id': int(id)}, {'$set': {'settings': settings}})
-        
-    
+
+
     async def get_settings(self, id):
+        await self._ensure_initialized()
         chat = await self.grp.find_one({'id':int(id)})
         if chat:
             return chat.get('settings', default_setgs)
         return default_setgs
-    
+
 
     async def disable_chat(self, chat, reason="No Reason"):
+        await self._ensure_initialized()
         chat_status=dict(
             is_disabled=True,
             reason=reason,
             )
         await self.grp.update_one({'id': int(chat)}, {'$set': {'chat_status': chat_status}})
-    
+
 
     async def total_chat_count(self):
+        await self._ensure_initialized()
         count = await self.grp.count_documents({})
         return count
-    
+
 
     async def get_all_chats(self):
+        await self._ensure_initialized()
         return self.grp.find({})
 
 
     async def get_db_size(self):
+        await self._ensure_initialized()
         return (await self.db.command("dbstats"))['dataSize']
 
     async def get_user(self, user_id):
+        await self._ensure_initialized()
         user_data = await self.users.find_one({"id": user_id})
         return user_data
-            
+
     async def update_user(self, user_data):
+        await self._ensure_initialized()
         await self.users.update_one({"id": user_data["id"]}, {"$set": user_data}, upsert=True)
 
     async def has_premium_access(self, user_id):
+        await self._ensure_initialized()
         user_data = await self.get_user(user_id)
         if user_data:
             expiry_time = user_data.get("expiry_time")
@@ -250,62 +283,74 @@ class Database:
             else:
                 await self.users.update_one({"id": user_id}, {"$set": {"expiry_time": None}})
         return False
-    
+
     async def check_remaining_uasge(self, userid):
+        await self._ensure_initialized()
         user_id = userid
-        user_data = await self.get_user(user_id)        
+        user_data = await self.get_user(user_id)
         expiry_time = user_data.get("expiry_time")
         # Calculate remaining time
         remaining_time = expiry_time - datetime.datetime.now()
         return remaining_time
 
     async def get_free_trial_status(self, user_id):
+        await self._ensure_initialized()
         user_data = await self.get_user(user_id)
         if user_data:
             return user_data.get("has_free_trial", False)
         return False
 
-    async def give_free_trail(self, userid):        
+    async def give_free_trail(self, userid):
+        await self._ensure_initialized()
         user_id = userid
-        seconds = 5*60         
+        seconds = 5*60
         expiry_time = datetime.datetime.now() + datetime.timedelta(seconds=seconds)
         user_data = {"id": user_id, "expiry_time": expiry_time, "has_free_trial": True}
         await self.users.update_one({"id": user_id}, {"$set": user_data}, upsert=True)
-    
-    
+
+
     async def all_premium_users(self):
+        await self._ensure_initialized()
         count = await self.users.count_documents({
         "expiry_time": {"$gt": datetime.datetime.now()}
         })
         return count
 
     async def set_thumbnail(self, id, file_id):
+        await self._ensure_initialized()
         await self.col.update_one({'id': int(id)}, {'$set': {'file_id': file_id}})
 
     async def get_thumbnail(self, id):
+        await self._ensure_initialized()
         user = await self.col.find_one({'id': int(id)})
         return user.get('file_id', None)
 
     async def set_caption(self, id, caption):
+        await self._ensure_initialized()
         await self.col.update_one({'id': int(id)}, {'$set': {'caption': caption}})
 
     async def get_caption(self, id):
+        await self._ensure_initialized()
         user = await self.col.find_one({'id': int(id)})
         return user.get('caption', None)
 
     async def set_msg_command(self, id, com):
+        await self._ensure_initialized()
         await self.col.update_one({'id': int(id)}, {'$set': {'message_command': com}})
 
     async def get_msg_command(self, id):
+        await self._ensure_initialized()
         user = await self.col.find_one({'id': int(id)})
         return user.get('message_command', None)
 
     async def set_save(self, id, save):
+        await self._ensure_initialized()
         await self.col.update_one({'id': int(id)}, {'$set': {'save': save}})
 
     async def get_save(self, id):
+        await self._ensure_initialized()
         user = await self.col.find_one({'id': int(id)})
-        return user.get('save', False) 
-    
+        return user.get('save', False)
 
-db = Database(USER_DB_URI, DATABASE_NAME)
+
+db = Database()
