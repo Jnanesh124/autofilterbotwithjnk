@@ -598,17 +598,6 @@ async def languages_cb_handler(client: Client, query: CallbackQuery):
             ),
         ])
 
-    btn.insert(
-        0,
-        [
-            InlineKeyboardButton(
-<<<<<<< HEAD
-                text="👇 sᴇ𝗅𝖾𝖼ᴛ 𝖸𝗈𝗎𝗋 𝖫𝖺𝗇𝗀𝗎𝖺𝗀𝖾𝗌 👇", callback_data="ident"
-=======
-                text="👇 sᴇ𝗅𝖾𝖼𝗍 𝖸𝗈𝗎𝗋 𝖫𝖺𝗇𝗀𝗎𝖺𝗀𝖾𝗌 👇", callback_data="ident"
-            )
-        ],
-    )
     req = query.from_user.id
     offset = 0
     btn.append([InlineKeyboardButton(text="↭ ʙᴀᴄᴋ ᴛᴏ ʜᴏᴍᴇ ↭", callback_data=f"fl#homepage#{key}")])
