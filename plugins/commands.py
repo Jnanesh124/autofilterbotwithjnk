@@ -10,7 +10,6 @@ from pyrogram.types import *
 from database.ia_filterdb import col, sec_col, get_file_details, unpack_new_file_id, get_bad_files
 from database.users_chats_db import db, delete_all_referal_users, get_referal_users_count, get_referal_all_users, referal_add_user
 from database.join_reqs import JoinReqs
-from database.ignored_words_mdb import add_ignored_word, remove_ignored_word, get_ignored_words
 from info import CLONE_MODE, OWNER_LNK, REACTIONS, CHANNELS, REQUEST_TO_JOIN_MODE, TRY_AGAIN_BTN, ADMINS, SHORTLINK_MODE, PREMIUM_AND_REFERAL_MODE, STREAM_MODE, AUTH_CHANNEL, REFERAL_PREMEIUM_TIME, REFERAL_COUNT, PAYMENT_TEXT, PAYMENT_QR, LOG_CHANNEL, PICS, BATCH_FILE_CAPTION, CUSTOM_FILE_CAPTION, PROTECT_CONTENT, CHNL_LNK, GRP_LNK, REQST_CHANNEL, SUPPORT_CHAT, MAX_B_TN, VERIFY, SHORTLINK_API, SHORTLINK_URL, TUTORIAL, VERIFY_TUTORIAL, IS_TUTORIAL, URL
 from utils import get_settings, pub_is_subscribed, get_size, is_subscribed, save_group_settings, temp, verify_user, check_token, check_verification, get_token, get_shortlink, get_tutorial, get_seconds
 from database.connections_mdb import active_connection
@@ -29,7 +28,18 @@ async def start(client, message):
         pass
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [[
-            InlineKeyboardButton('ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url=CHNL_LNK)
+            InlineKeyboardButton('main channel', url=f'http://t.me/JNK_BACKUP')
+        ],[
+            InlineKeyboardButton('🔞 ADULT CHANNEL', url=f'https://t.me/+hLQh-FvQcL0xNWZl')
+        ],[
+            InlineKeyboardButton('🎬 ALL OTT FILE CHANNEL', url=f'https://t.me/+kG8NP8YLiuk0YTE1'),
+            InlineKeyboardButton('🎬 KANNADA OTT CHANNEL', url=f'https://t.me/+y9fMTjC6TLJhMTE1'),
+            InlineKeyboardButton('🖥 ONLINE STREAMING CHANNEL', url=f'https://t.me/+IK-TVp4mc8w3MTM1')
+        ],[
+            InlineKeyboardButton('GROUP 1', url=f'https://t.me/+dd9gZo9nlg9mNjQ1'),
+            InlineKeyboardButton('GROUP 2', url=f'https://t.me/+dau0zdsJPhI2OWNl')
+        ],[
+            InlineKeyboardButton('🛍 FREE LOOTS CHANNEL', url=f'https://t.me/JNKFREELOOTS')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply(script.START_TXT.format(message.from_user.mention if message.from_user else message.chat.title, temp.U_NAME, temp.B_NAME), reply_markup=reply_markup, disable_web_page_preview=True)
@@ -45,18 +55,41 @@ async def start(client, message):
     if len(message.command) != 2:
         if PREMIUM_AND_REFERAL_MODE == True:
             buttons = [[
-            InlineKeyboardButton('ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url=CHNL_LNK)
+            InlineKeyboardButton('main channel', url=f'http://t.me/JNK_BACKUP')
+        ],[
+            InlineKeyboardButton('🔞 ADULT CHANNEL', url=f'https://t.me/+hLQh-FvQcL0xNWZl')
+        ],[
+            InlineKeyboardButton('🎬 ALL OTT FILE CHANNEL', url=f'https://t.me/+kG8NP8YLiuk0YTE1'),
+            InlineKeyboardButton('🎬 KANNADA OTT CHANNEL', url=f'https://t.me/+y9fMTjC6TLJhMTE1'),
+            InlineKeyboardButton('🖥 ONLINE STREAMING CHANNEL', url=f'https://t.me/+IK-TVp4mc8w3MTM1')
+        ],[
+            InlineKeyboardButton('GROUP 1', url=f'https://t.me/+dd9gZo9nlg9mNjQ1'),
+            InlineKeyboardButton('GROUP 2', url=f'https://t.me/+dau0zdsJPhI2OWNl')
+        ],[
+            InlineKeyboardButton('🛍 FREE LOOTS CHANNEL', url=f'https://t.me/JNKFREELOOTS')
         ]]
         else:
             buttons = [[
-            InlineKeyboardButton('ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url=CHNL_LNK)
+            InlineKeyboardButton('main channel', url=f'http://t.me/JNK_BACKUP')
+        ],[
+            InlineKeyboardButton('🔞 ADULT CHANNEL', url=f'https://t.me/+hLQh-FvQcL0xNWZl')
+        ],[
+            InlineKeyboardButton('🎬 ALL OTT FILE CHANNEL', url=f'https://t.me/+kG8NP8YLiuk0YTE1'),
+            InlineKeyboardButton('🎬 KANNADA OTT CHANNEL', url=f'https://t.me/+y9fMTjC6TLJhMTE1'),
+            InlineKeyboardButton('🖥 ONLINE STREAMING CHANNEL', url=f'https://t.me/+IK-TVp4mc8w3MTM1')
+        ],[
+            InlineKeyboardButton('GROUP 1', url=f'https://t.me/+dd9gZo9nlg9mNjQ1'),
+            InlineKeyboardButton('GROUP 2', url=f'https://t.me/+dau0zdsJPhI2OWNl')
+        ],[
+            InlineKeyboardButton('🛍 FREE LOOTS CHANNEL', url=f'https://t.me/JNKFREELOOTS')
         ]]
         if CLONE_MODE == True:
             buttons.append([InlineKeyboardButton('ᴄʀᴇᴀᴛᴇ ᴏᴡɴ ᴄʟᴏɴᴇ ʙᴏᴛ', callback_data='clone')])
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_text(
-            text="<b>👊Hi, welcome! I am an auto-filter bot.⚡️\n\nSend me your movie are webseries name.🎬\nI will send u that movie Direct File📁</b>",
-            reply_markup=reply_markup
+            text=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
+            reply_markup=reply_markup,
+            parse_mode=enums.ParseMode.HTML
         )
         return
     
@@ -119,18 +152,41 @@ async def start(client, message):
     if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         if PREMIUM_AND_REFERAL_MODE == True:
             buttons = [[
-            InlineKeyboardButton('ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url=CHNL_LNK)
+            InlineKeyboardButton('main channel', url=f'http://t.me/JNK_BACKUP')
+        ],[
+            InlineKeyboardButton('🔞 ADULT CHANNEL', url=f'https://t.me/+hLQh-FvQcL0xNWZl')
+        ],[
+            InlineKeyboardButton('🎬 ALL OTT FILE CHANNEL', url=f'https://t.me/+kG8NP8YLiuk0YTE1'),
+            InlineKeyboardButton('🎬 KANNADA OTT CHANNEL', url=f'https://t.me/+y9fMTjC6TLJhMTE1'),
+            InlineKeyboardButton('🖥 ONLINE STREAMING CHANNEL', url=f'https://t.me/+IK-TVp4mc8w3MTM1')
+        ],[
+            InlineKeyboardButton('GROUP 1', url=f'https://t.me/+dd9gZo9nlg9mNjQ1'),
+            InlineKeyboardButton('GROUP 2', url=f'https://t.me/+dau0zdsJPhI2OWNl')
+        ],[
+            InlineKeyboardButton('🛍 FREE LOOTS CHANNEL', url=f'https://t.me/JNKFREELOOTS')
         ]]
         else:
             buttons = [[
-            InlineKeyboardButton('ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url=CHNL_LNK)
+            InlineKeyboardButton('main channel', url=f'http://t.me/JNK_BACKUP')
+        ],[
+            InlineKeyboardButton('🔞 ADULT CHANNEL', url=f'https://t.me/+hLQh-FvQcL0xNWZl')
+        ],[
+            InlineKeyboardButton('🎬 ALL OTT FILE CHANNEL', url=f'https://t.me/+kG8NP8YLiuk0YTE1'),
+            InlineKeyboardButton('🎬 KANNADA OTT CHANNEL', url=f'https://t.me/+y9fMTjC6TLJhMTE1'),
+            InlineKeyboardButton('🖥 ONLINE STREAMING CHANNEL', url=f'https://t.me/+IK-TVp4mc8w3MTM1')
+        ],[
+            InlineKeyboardButton('GROUP 1', url=f'https://t.me/+dd9gZo9nlg9mNjQ1'),
+            InlineKeyboardButton('GROUP 2', url=f'https://t.me/+dau0zdsJPhI2OWNl')
+        ],[
+            InlineKeyboardButton('🛍 FREE LOOTS CHANNEL', url=f'https://t.me/JNKFREELOOTS')
         ]]
         if CLONE_MODE == True:
             buttons.append([InlineKeyboardButton('ᴄʀᴇᴀᴛᴇ ᴏᴡɴ ᴄʟᴏɴᴇ ʙᴏᴛ', callback_data='clone')])
         reply_markup = InlineKeyboardMarkup(buttons)      
         await message.reply_text(
-            text="<b>👊Hi, welcome! I am an auto-filter bot.⚡️\n\nSend me your movie are webseries name.🎬\nI will send u that movie Direct File📁</b>",
-            reply_markup=reply_markup
+            text=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
+            reply_markup=reply_markup,
+            parse_mode=enums.ParseMode.HTML
         )
         return
     data = message.command[1]
@@ -154,18 +210,41 @@ async def start(client, message):
         else:
             if PREMIUM_AND_REFERAL_MODE == True:
                 buttons = [[
-                    InlineKeyboardButton('ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url=CHNL_LNK)
-                ]]
+            InlineKeyboardButton('main channel', url=f'http://t.me/JNK_BACKUP')
+        ],[
+            InlineKeyboardButton('🔞 ADULT CHANNEL', url=f'https://t.me/+hLQh-FvQcL0xNWZl')
+        ],[
+            InlineKeyboardButton('🎬 ALL OTT FILE CHANNEL', url=f'https://t.me/+kG8NP8YLiuk0YTE1'),
+            InlineKeyboardButton('🎬 KANNADA OTT CHANNEL', url=f'https://t.me/+y9fMTjC6TLJhMTE1'),
+            InlineKeyboardButton('🖥 ONLINE STREAMING CHANNEL', url=f'https://t.me/+IK-TVp4mc8w3MTM1')
+        ],[
+            InlineKeyboardButton('GROUP 1', url=f'https://t.me/+dd9gZo9nlg9mNjQ1'),
+            InlineKeyboardButton('GROUP 2', url=f'https://t.me/+dau0zdsJPhI2OWNl')
+        ],[
+            InlineKeyboardButton('🛍 FREE LOOTS CHANNEL', url=f'https://t.me/JNKFREELOOTS')
+        ]]
             else:
                 buttons = [[
-                    InlineKeyboardButton('ᴊᴏɪɴ ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ', url=CHNL_LNK)
-                ]]
+            InlineKeyboardButton('main channel', url=f'http://t.me/JNK_BACKUP')
+        ],[
+            InlineKeyboardButton('🔞 ADULT CHANNEL', url=f'https://t.me/+hLQh-FvQcL0xNWZl')
+        ],[
+            InlineKeyboardButton('🎬 ALL OTT FILE CHANNEL', url=f'https://t.me/+kG8NP8YLiuk0YTE1'),
+            InlineKeyboardButton('🎬 KANNADA OTT CHANNEL', url=f'https://t.me/+y9fMTjC6TLJhMTE1'),
+            InlineKeyboardButton('🖥 ONLINE STREAMING CHANNEL', url=f'https://t.me/+IK-TVp4mc8w3MTM1')
+        ],[
+            InlineKeyboardButton('GROUP 1', url=f'https://t.me/+dd9gZo9nlg9mNjQ1'),
+            InlineKeyboardButton('GROUP 2', url=f'https://t.me/+dau0zdsJPhI2OWNl')
+        ],[
+            InlineKeyboardButton('🛍 FREE LOOTS CHANNEL', url=f'https://t.me/JNKFREELOOTS')
+        ]]
             if CLONE_MODE == True:
                 buttons.append([InlineKeyboardButton('ᴄʀᴇᴀᴛᴇ ᴏᴡɴ ᴄʟᴏɴᴇ ʙᴏᴛ', callback_data='clone')])
             reply_markup = InlineKeyboardMarkup(buttons)
             await message.reply_text(
-            text="<b>👊Hi, welcome! I am an auto-filter bot.⚡️\n\nSend me your movie are webseries name.🎬\nI will send u that movie Direct File📁</b>",
-            reply_markup=reply_markup
+                text=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
+                reply_markup=reply_markup,
+                parse_mode=enums.ParseMode.HTML
             )
             return 
     try:
@@ -208,8 +287,11 @@ async def start(client, message):
                     download = f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
 
                 if STREAM_MODE == True:
-                    [[
-                    InlineKeyboardButton('UPDATE CHANNEL', url=f"https://t.me/JNK_BACKUP")
+                    button = [[
+                        InlineKeyboardButton("• ᴅᴏᴡɴʟᴏᴀᴅ •", url=download),
+                        InlineKeyboardButton('• ᴡᴀᴛᴄʜ •', url=stream)
+                    ],[
+                        InlineKeyboardButton("• ᴡᴀᴛᴄʜ ɪɴ ᴡᴇʙ ᴀᴘᴘ •", web_app=WebAppInfo(url=stream))
                     ]]
                     reply_markup = InlineKeyboardMarkup(button)
                 else:
@@ -238,11 +320,11 @@ async def start(client, message):
                 continue
             await asyncio.sleep(1) 
         await sts.delete()
-        k = await client.send_message(chat_id = message.from_user.id, text=f"<blockquote><b>\n\nᴛʜɪs File 📁 ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ ⏰<b><u>10 mins</u>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)\n\n<b>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.\n\n 🍿 Update Channel : @JNK_BACKUP</b></blockquote>")
+        k = await client.send_message(chat_id = message.from_user.id, text=f"<blockquote><b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nᴛʜɪs ᴍᴇssᴀɢᴇ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ <b><u>10 mins</u> 🫥 <i></b>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)</i>.\n\n<b><i>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.</i></b></blockquote>")
         await asyncio.sleep(600)
         for x in filesarr:
             await x.delete()
-        await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ\n\njoin @JNK_BACKUP</b>")  
+        await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")  
         return
     
     elif data.split("-", 1)[0] == "DSTORE":
@@ -277,8 +359,11 @@ async def start(client, message):
                     download = f"{URL}{str(log_msg.id)}/{quote_plus(get_name(log_msg))}?hash={get_hash(log_msg)}"
  
                 if STREAM_MODE == True:
-                    [[
-                    InlineKeyboardButton('UPDATE CHANNEL', url=f"https://t.me/JNK_BACKUP")
+                    button = [[
+                        InlineKeyboardButton("• ᴅᴏᴡɴʟᴏᴀᴅ •", url=download),
+                        InlineKeyboardButton('• ᴡᴀᴛᴄʜ •', url=stream)
+                    ],[
+                        InlineKeyboardButton("• ᴡᴀᴛᴄʜ ɪɴ ᴡᴇʙ ᴀᴘᴘ •", web_app=WebAppInfo(url=stream))
                     ]]
                     reply_markup = InlineKeyboardMarkup(button)
                 else:
@@ -303,11 +388,11 @@ async def start(client, message):
             filesarr.append(p)
             await asyncio.sleep(1)
         await sts.delete()
-        k = await client.send_message(chat_id = message.from_user.id, text=f"<blockquote><b>\n\nᴛʜɪs File 📁 ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ ⏰<b><u>10 mins</u>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)\n\n<b>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.\n\n 🍿 Update Channel : @JNK_BACKUP</b></blockquote>")
+        k = await client.send_message(chat_id = message.from_user.id, text=f"<blockquote><b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nᴛʜɪs ᴍᴇssᴀɢᴇ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ <b><u>10 mins</u> 🫥 <i></b>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)</i>.\n\n<b><i>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.</i></b></blockquote>")
         await asyncio.sleep(600)
         for x in filesarr:
             await x.delete()
-        await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ\n\njoin @JNK_BACKUP</b>")
+        await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
         return
 
     elif data.split("-", 1)[0] == "verify":
@@ -317,14 +402,10 @@ async def start(client, message):
             return await message.reply_text(text="<b>ɪɴᴠᴀʟɪᴅ ʟɪɴᴋ ᴏʀ ᴇxᴘɪʀᴇᴅ ʟɪɴᴋ</b>", protect_content=True)
         is_valid = await check_token(client, userid, token)
         if is_valid == True:
-            text = "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜ ʜᴀᴠᴇ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ᴛʜᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ...\n\nɴᴏᴡ ʏᴏᴜ ʜᴀᴠᴇ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ᴛɪʟʟ ᴛᴏᴅᴀʏ ɴᴏᴡ ᴇɴᴊᴏʏ\n\n</b>"
+            text = "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜ ʜᴀᴠᴇ ᴄᴏᴍᴘʟᴇᴛᴇᴅ ᴛʜᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ...\n\nɴᴏᴡ ʏᴏᴜ ʜᴀᴠᴇ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇss ᴛɪʟʟ ᴛᴏᴅᴀʏ ɴᴏᴡ ᴇɴᴊᴏʏ\n\n</b>"
             if PREMIUM_AND_REFERAL_MODE == True:
-                text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴꜱ ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"           
-            await safe_reply_message(
-                message=message,
-                text=text.format(message.from_user.mention),
-                protect_content=True
-            )
+                text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴꜱ ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
+            await message.reply_text(text=text.format(message.from_user.mention), protect_content=True)
             await verify_user(client, userid, token)
         else:
             return await message.reply_text(text="<b>ɪɴᴠᴀʟɪᴅ ʟɪɴᴋ ᴏʀ ᴇxᴘɪʀᴇᴅ ʟɪɴᴋ</b>", protect_content=True)
@@ -345,7 +426,7 @@ async def start(client, message):
             text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴏᴘᴇɴɪɴɢ ʟɪɴᴋ ᴀɴᴅ ᴡᴀᴛᴄʜɪɴɢ ᴀᴅs ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
         k = await client.send_message(chat_id=message.from_user.id, text=text, reply_markup=InlineKeyboardMarkup(btn))
         await asyncio.sleep(300)
-        await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ\n\njoin @JNK_BACKUP</b>")
+        await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
         return
         
     
@@ -365,13 +446,13 @@ async def start(client, message):
             text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴏᴘᴇɴɪɴɢ ʟɪɴᴋ ᴀɴᴅ ᴡᴀᴛᴄʜɪɴɢ ᴀᴅs ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
         k = await client.send_message(chat_id=user, text=text, reply_markup=InlineKeyboardMarkup(btn))
         await asyncio.sleep(1200)
-        await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ\n\njoin @JNK_BACKUP</b>")
+        await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
         return
         
     elif data.startswith("all"):
         files = temp.GETALL.get(file_id)
         if not files:
-            return await message.reply('<b><i>No such file exist.</b></i>')
+            return await message.reply('<b><i>No such file exist.</i></b>')
         filesarr = []
         for file in files:
             file_id = file["file_id"]
@@ -403,7 +484,7 @@ async def start(client, message):
                     )
                     return
             if STREAM_MODE == True:
-                button = [[InlineKeyboardButton('UPDATE CHANNEL', url=f"https://t.me/JNK_BACKUP")]]
+                button = [[InlineKeyboardButton('sᴛʀᴇᴀᴍ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ', callback_data=f'generate_stream_link:{file_id}')]]
                 reply_markup=InlineKeyboardMarkup(button)
             else:
                 reply_markup = None
@@ -415,11 +496,11 @@ async def start(client, message):
                 reply_markup=reply_markup
             )
             filesarr.append(msg)
-        k = await client.send_message(chat_id = message.from_user.id, text=f"<blockquote><b>\n\nᴛʜɪs File 📁 ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ ⏰<b><u>10 mins</u>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)\n\n<b>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.\n\n 🍿 Update Channel : @JNK_BACKUP</b></blockquote>")
+        k = await client.send_message(chat_id = message.from_user.id, text=f"<blockquote><b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nᴛʜɪs ᴍᴇssᴀɢᴇ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ <b><u>10 mins</u> 🫥 <i></b>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)</i>.\n\n<b><i>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.</i></b></blockquote>")
         await asyncio.sleep(600)
         for x in filesarr:
             await x.delete()
-        await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ\n\njoin @JNK_BACKUP</b>")
+        await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
         return    
         
     elif data.startswith("files"):
@@ -442,7 +523,7 @@ async def start(client, message):
                 text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴏᴘᴇɴɪɴɢ ʟɪɴᴋ ᴀɴᴅ ᴡᴀᴛᴄʜɪɴɢ ᴀᴅs ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
             k = await client.send_message(chat_id=message.from_user.id, text=text, reply_markup=InlineKeyboardMarkup(btn))
             await asyncio.sleep(1200)
-            await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ\n\njoin @JNK_BACKUP</b>")
+            await k.edit("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ</b>")
             return
     user = message.from_user.id
     files_ = await get_file_details(file_id)           
@@ -466,7 +547,7 @@ async def start(client, message):
                     )
                     return
             if STREAM_MODE == True:
-                button = [[InlineKeyboardButton('UPDATE CHANNEL', url=f"https://t.me/JNK_BACKUP")]]
+                button = [[InlineKeyboardButton('sᴛʀᴇᴀᴍ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ', callback_data=f'generate_stream_link:{file_id}')]]
                 reply_markup=InlineKeyboardMarkup(button)
             else:
                 reply_markup = None
@@ -488,7 +569,7 @@ async def start(client, message):
                     return
             await msg.edit_caption(caption=f_caption)
             btn = [[InlineKeyboardButton("✅ ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ ✅", callback_data=f'del#{file_id}')]]
-            k = await msg.reply(text=f"<blockquote><b>\n\nᴛʜɪs File 📁 ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ ⏰<b><u>10 mins</u>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)\n\n<b>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.\n\n 🍿 Update Channel : @JNK_BACKUP</b></blockquote>")
+            k = await msg.reply(text=f"<blockquote><b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nᴛʜɪs ᴍᴇssᴀɢᴇ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ <b><u>10 mins</u> 🫥 <i></b>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)</i>.\n\n<b><i>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.</i></b></blockquote>")
             await asyncio.sleep(600)
             await msg.delete()
             await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴀɢᴀɪɴ ᴛʜᴇɴ ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ</b>",reply_markup=InlineKeyboardMarkup(btn))
@@ -517,15 +598,14 @@ async def start(client, message):
             text = "<b>ʜᴇʏ {} 👋,\n\nʏᴏᴜ ᴀʀᴇ ɴᴏᴛ ᴠᴇʀɪғɪᴇᴅ ᴛᴏᴅᴀʏ, ᴘʟᴇᴀꜱᴇ ᴄʟɪᴄᴋ ᴏɴ ᴠᴇʀɪғʏ & ɢᴇᴛ ᴜɴʟɪᴍɪᴛᴇᴅ ᴀᴄᴄᴇꜱꜱ ғᴏʀ ᴛᴏᴅᴀʏ</b>"
             if PREMIUM_AND_REFERAL_MODE == True:
                 text += "<b>ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴅɪʀᴇᴄᴛ ғɪʟᴇꜱ ᴡɪᴛʜᴏᴜᴛ ᴀɴʏ ᴠᴇʀɪғɪᴄᴀᴛɪᴏɴꜱ ᴛʜᴇɴ ʙᴜʏ ʙᴏᴛ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ ☺️\n\n💶 ꜱᴇɴᴅ /plan ᴛᴏ ʙᴜʏ ꜱᴜʙꜱᴄʀɪᴘᴛɪᴏɴ</b>"
-            await safe_reply_message(
-                message=message,
+            await message.reply_text(
                 text=text.format(message.from_user.mention),
-                reply_markup=InlineKeyboardMarkup(btn),
-                protect_content=True
+                protect_content=True,
+                reply_markup=InlineKeyboardMarkup(btn)
             )
             return
     if STREAM_MODE == True:
-        button = [[InlineKeyboardButton('UPDATE CHANNEL', url=f"https://t.me/JNK_BACKUP")]]
+        button = [[InlineKeyboardButton('sᴛʀᴇᴀᴍ ᴀɴᴅ ᴅᴏᴡɴʟᴏᴀᴅ', callback_data=f'generate_stream_link:{file_id}')]]
         reply_markup=InlineKeyboardMarkup(button)
     else:
         reply_markup = None
@@ -537,7 +617,7 @@ async def start(client, message):
         reply_markup=reply_markup
     )
     btn = [[InlineKeyboardButton("✅ ɢᴇᴛ ғɪʟᴇ ᴀɢᴀɪɴ ✅", callback_data=f'del#{file_id}')]]
-    k = await msg.reply(text=f"<blockquote><b>\n\nᴛʜɪs File 📁 ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ ⏰<b><u>10 mins</u>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)\n\n<b>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.\n\n 🍿 Update Channel : @JNK_BACKUP</b></blockquote>")
+    k = await msg.reply(text=f"<blockquote><b><u>❗️❗️❗️IMPORTANT❗️️❗️❗️</u></b>\n\nᴛʜɪs ᴍᴇssᴀɢᴇ ᴡɪʟʟ ʙᴇ ᴅᴇʟᴇᴛᴇᴅ ɪɴ <b><u>10 mins</u> 🫥 <i></b>(ᴅᴜᴇ ᴛᴏ ᴄᴏᴘʏʀɪɢʜᴛ ɪssᴜᴇs)</i>.\n\n<b><i>ᴘʟᴇᴀsᴇ ғᴏʀᴡᴀʀᴅ ᴛʜɪs ᴍᴇssᴀɢᴇ ᴛᴏ ʏᴏᴜʀ sᴀᴠᴇᴅ ᴍᴇssᴀɢᴇs ᴏʀ ᴀɴʏ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ.</i></b></blockquote>")
     await asyncio.sleep(600)
     await msg.delete()
     await k.edit_text("<b>✅ ʏᴏᴜʀ ᴍᴇssᴀɢᴇ ɪs sᴜᴄᴄᴇssғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴀɢᴀɪɴ ᴛʜᴇɴ ᴄʟɪᴄᴋ ᴏɴ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ</b>",reply_markup=InlineKeyboardMarkup(btn))
@@ -589,10 +669,12 @@ async def delete(bot, message):
         await msg.edit('This is not supported file format')
         return
     
-    # Updated unpacking to handle all returned values
-    unpacked = unpack_new_file_id(media.file_id)
-    file_id = unpacked[0]  # First value is file_id
-    file_ref = unpacked[1]  # Second value is file_ref
+    try:
+        file_id, file_ref = unpack_new_file_id(media.file_id)
+    except ValueError:
+        # Handle case where unpack_new_file_id returns more than 2 values
+        unpacked = unpack_new_file_id(media.file_id)
+        file_id = unpacked[0] if len(unpacked) > 0 else media.file_id
 
     result = col.delete_one({
         'file_id': file_id,
@@ -622,6 +704,8 @@ async def delete(bot, message):
         if result.deleted_count:
             await msg.edit('File is successfully deleted from database')
         else:
+            # files indexed before https://github.com/EvamariaTG/EvaMaria/commit/f3d2a1bcb155faf44178e5d7a685a1b533e714bf#diff-86b613edf1748372103e94cacff3b578b36b698ef9c16817bb98fe9ef22fb669R39 
+            # have original file name.
             result = col.delete_many({
                 'file_name': media.file_name,
                 'file_size': media.file_size
@@ -1011,7 +1095,7 @@ async def shortlink(bot, message):
         return await message.reply(f"You are anonymous admin. Turn off anonymous admin and try again this command")
     chat_type = message.chat.type
     if chat_type == enums.ChatType.PRIVATE:
-        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This command only works on groups !\n\n<u>Follow These Steps to Connect Shortener:</u>\n\n1. Add Me in Your Group with Full Admin Rights\n\n2. After Adding in Grp, Set your Shortener\n\nSend this command in your group\n\n—> /shortlink ""{your_shortener_website_name} {your_shortener_api}\n\n#Sample:-\n/shortlink nk.in CAACAgUAAxkBAAEJ4IUC_DSmirN6eFWp4KInAACsQoAAoHSSFYub2D15dGHfy8E\n\nThat's it!!! Enjoy Earning Money 💲\n\n[[[ Trusted Earning Site - https://ink.in]]]\n\nIf you have any Doubts, Feel Free to Ask me - @JNK_BACKUP \n\n(JOIN - @JNK_BACKUP)</b>")
+        return await message.reply_text(f"<b>Hey {message.from_user.mention}, This command only works on groups !\n\n<u>Follow These Steps to Connect Shortener:</u>\n\n1. Add Me in Your Group with Full Admin Rights\n\n2. After Adding in Grp, Set your Shortener\n\nSend this command in your group\n\n—> /shortlink ""{your_shortener_website_name} {your_shortener_api}\n\n#Sample:-\n/shortlink kpslink.in CAACAgUAAxkBAAEJ4GtkyPgEzpIUC_DSmirN6eFWp4KInAACsQoAAoHSSFYub2D15dGHfy8E\n\nThat's it!!! Enjoy Earning Money 💲\n\n[[[ Trusted Earning Site - https://kpslink.in]]]\n\nIf you have any Doubts, Feel Free to Ask me - @kingvj01\n\n(Puriyala na intha contact la message pannunga - @kngvj01)</b>")
     elif chat_type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         grpid = message.chat.id
         title = message.chat.title
@@ -1027,7 +1111,7 @@ async def shortlink(bot, message):
     try:
         command, shortlink_url, api = data.split(" ")
     except:
-        return await message.reply_text("<b>Command Incomplete :(\n\nGive me a shortener website link and api along with the command !\n\nFormat: <code>/shortlink knk.in e3d82cdf8f9f4783c42170b515d1c271fb1c4500</code></b>")
+        return await message.reply_text("<b>Command Incomplete :(\n\nGive me a shortener website link and api along with the command !\n\nFormat: <code>/shortlink kpslink.in e3d82cdf8f9f4783c42170b515d1c271fb1c4500</code></b>")
     reply = await message.reply_text("<b>Please Wait...</b>")
     shortlink_url = re.sub(r"https?://?", "", shortlink_url)
     shortlink_url = re.sub(r"[:/]", "", shortlink_url)
@@ -1345,55 +1429,3 @@ async def purge_requests(client, message):
             parse_mode=enums.ParseMode.MARKDOWN,
             disable_web_page_preview=True
         )
-
-@Client.on_message(filters.command("rword") & filters.user(ADMINS))
-async def remove_word_handler(client, message):
-    """Remove ignored word command"""
-    if len(message.command) < 2:
-        return await message.reply_text(
-            "<b>Usage: /rword word_to_remove\n\nExample: /rword @username</b>"
-        )
-
-    word = message.command[1]
-    success = await remove_ignored_word(word)
-
-    if success:
-        await message.reply_text(f"<b>Successfully removed '{word}' from ignored words list.</b>")
-    else:
-        await message.reply_text(f"<b>'{word}' was not found in ignored words list.</b>")
-
-@Client.on_message(filters.command("addword") & filters.user(ADMINS))
-async def add_word_handler(client, message):
-    """Add ignored word command"""
-    if len(message.command) < 2:
-        return await message.reply_text(
-            "<b>Usage: /addword word_to_add\n\nExample: /addword @username</b>"
-        )
-
-    word = message.command[1]
-    success = await add_ignored_word(word)
-
-    if success:
-        await message.reply_text(f"<b>Successfully added '{word}' to ignored words list.</b>")
-    else:
-        await message.reply_text(f"<b>'{word}' is already in ignored words list.</b>")
-
-@Client.on_message(filters.command("listr") & filters.user(ADMINS))
-async def list_ignored_words_handler(client, message):
-    """List all ignored words command"""
-    words = await get_ignored_words()
-
-    if not words:
-        return await message.reply_text("<b>No ignored words found.</b>")
-
-    word_list = "\n".join([f"• {word}" for word in words])
-    text = f"<b>Ignored Words List ({len(words)} words):</b>\n\n{word_list}"
-
-    if len(text) > 4096:
-        # If message is too long, send as file
-        with open('ignored_words.txt', 'w+') as f:
-            f.write('\n'.join(words))
-        await message.reply_document('ignored_words.txt', caption=f"<b>Ignored Words List ({len(words)} words)</b>")
-        os.remove('ignored_words.txt')
-    else:
-        await message.reply_text(text)
