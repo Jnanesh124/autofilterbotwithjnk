@@ -1,0 +1,51 @@
+Instance created. Preparing to start...
+Traceback (most recent call last):
+  File "/VJ-FILTER-BOT/bot.py", line 83, in <module>
+    asyncio.run(start())
+  File "/usr/local/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/local/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/VJ-FILTER-BOT/bot.py", line 37, in start
+    b_users, b_chats = await db.get_banned()
+  File "/VJ-FILTER-BOT/database/users_chats_db.py", line 180, in get_banned
+    b_chats = [chat['id'] async for chat in chats]
+  File "/VJ-FILTER-BOT/database/users_chats_db.py", line 180, in <listcomp>
+    b_chats = [chat['id'] async for chat in chats]
+  File "/usr/local/lib/python3.10/site-packages/motor/core.py", line 1158, in next
+    if self.alive and (self._buffer_size() or await self._get_more()):
+RuntimeError: Task <Task pending name='Task-1' coro=<start() running at /VJ-FILTER-BOT/bot.py:37> cb=[_run_until_complete_cb() at /usr/local/lib/python3.10/asyncio/base_events.py:184]> got Future <Future pending cb=[_chain_future.<locals>._call_check_cancel() at /usr/local/lib/python3.10/asyncio/futures.py:385]> attached to a different loop
+
+████████╗███████╗███████╗██╗  ██╗    ╔██        ██╗       ██╗
+╚═ ██╔══╝██╔════╝██╔════╝██║  ██║     ║██      ██║        ██║
+   ██║    █████╗  ██║      ███████║      ║██    ██║         ██║
+   ██║    ██╔══╝  ██║      ██╔══██║       ║██  ██║  ╔██     ██║
+   ██║    ███████╗███████╗██║  ██║        ║████║   ║████████║
+   ╚═╝    ╚══════╝╚══════╝╚═╝  ╚═╝        ╚════╝   ╚════════╝
+Instance is starting... Waiting for health checks to pass.
+Application exited with code 1. This usually indicates an application failure. Check that the command used to launch your application is correct.
+Traceback (most recent call last):
+  File "/VJ-FILTER-BOT/bot.py", line 83, in <module>
+    asyncio.run(start())
+
+████████╗███████╗███████╗██╗  ██╗    ╔██        ██╗       ██╗
+╚═ ██╔══╝██╔════╝██╔════╝██║  ██║     ║██      ██║        ██║
+  File "/usr/local/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/local/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+   ██║    █████╗  ██║      ███████║      ║██    ██║         ██║
+  File "/VJ-FILTER-BOT/bot.py", line 37, in start
+   ██║    ██╔══╝  ██║      ██╔══██║       ║██  ██║  ╔██     ██║
+   ██║    ███████╗███████╗██║  ██║        ║████║   ║████████║
+    b_users, b_chats = await db.get_banned()
+   ╚═╝    ╚══════╝╚══════╝╚═╝  ╚═╝        ╚════╝   ╚════════╝
+  File "/VJ-FILTER-BOT/database/users_chats_db.py", line 180, in get_banned
+    b_chats = [chat['id'] async for chat in chats]
+  File "/VJ-FILTER-BOT/database/users_chats_db.py", line 180, in <listcomp>
+    b_chats = [chat['id'] async for chat in chats]
+  File "/usr/local/lib/python3.10/site-packages/motor/core.py", line 1158, in next
+    if self.alive and (self._buffer_size() or await self._get_more()):
+RuntimeError: Task <Task pending name='Task-1' coro=<start() running at /VJ-FILTER-BOT/bot.py:37> cb=[_run_until_complete_cb() at /usr/local/lib/python3.10/asyncio/base_events.py:184]> got Future <Future pending cb=[_chain_future.<locals>._call_check_cancel() at /usr/local/lib/python3.10/asyncio/futures.py:385]> attached to a different loop
+Application exited with code 1. This usually indicates an application failure. Check that the command used to launch your application is correct.
+Instance stopped.
