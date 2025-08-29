@@ -67,14 +67,9 @@ def clean_file_name(file_name):
 
 def is_file_already_saved(file_id, file_name):
     """Check if the file is already saved in either collection."""
-    # Check by file_id first
+    # Only check by exact file_id match to allow same movie with different sizes/qualities
     existing_file = col.find_one({'file_id': file_id}) or sec_col.find_one({'file_id': file_id})
-    if existing_file:
-        return True
-
-    # For duplicate file names with different sizes, allow saving
-    # Only check exact file_id match to avoid blocking different quality files
-    return False
+    return existing_file is not None
 
 async def get_search_results(chat_id, query, file_type=None, max_results=10, offset=0, filter=False):
     """For given query return (results, next_offset)"""
