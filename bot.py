@@ -30,6 +30,8 @@ from TechVJ.bot.clients import initialize_clients
 
 ppath = "plugins/*.py"
 files = glob.glob(ppath)
+TechVJBot.start()
+loop = asyncio.get_event_loop()
 
 
 async def start():
@@ -80,6 +82,6 @@ async def start():
 
 if __name__ == '__main__':
     try:
-        asyncio.run(start())
+        loop.run_until_complete(start())
     except KeyboardInterrupt:
         logging.info('Service Stopped Bye 👋')
