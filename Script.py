@@ -5,8 +5,7 @@
 class script(object):
     START_TXT = """<b><blockquote>ʜᴇʟʟᴏ {} 👋,</blockquote>
     
-i am  movie and webseries file search bot 
-just send ur movie name i will send u file</b>"""
+i am  movie and webseries file search bot just send ur movie name i will send u file 📁</b>"""
 
     CLONE_START_TXT = """<b><blockquote>ʜᴇʟʟᴏ {}, ᴍʏ ɴᴀᴍᴇ <a href=https://t.me/{}>{}</a></blockquote>
     
@@ -759,4 +758,5 @@ Example:- /set_caption 📕 File Name: {filename}
 
 
     
+
 
