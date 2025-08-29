@@ -2605,18 +2605,24 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
                     await asyncio.sleep(300)
                     await fek.delete()
     else:
-        fuk = await reply_msg.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
-        await asyncio.sleep(300)
-        await fuk.delete()
-        await message.delete()
-    except Exception as e:
-        logger.error(f"Error in auto_filter: {e}")
-        if "CHAT_WRITE_FORBIDDEN" in str(e):
-            print(f"Cannot write to chat {msg.chat.id}: Permission denied")
         try:
-            await reply_msg.delete()
-        except:
-            pass
+            fuk = await reply_msg.edit_text(text=cap, reply_markup=InlineKeyboardMarkup(btn), disable_web_page_preview=True)
+            try:
+                if settings['auto_delete']:
+                    await asyncio.sleep(300)
+                    await fuk.delete()
+            except KeyError:
+                await save_group_settings(message.chat.id, 'auto_delete', True)
+                settings = await get_settings(message.chat.id)
+                if settings['auto_delete']:
+                    await asyncio.sleep(300)
+                    await fuk.delete()
+        except Exception as e:
+            logger.exception(e)
+            try:
+                await reply_msg.delete()
+            except:
+                pass
 
 
 async def advantage_spell_chok(client, name, msg, reply_msg, vj_search):
