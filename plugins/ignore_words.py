@@ -11,7 +11,7 @@ import io
 
 @Client.on_message(filters.command('addword') & filters.incoming)
 async def add_word_handler(client, message):
-    if str(message.from_user.id) not in ADMINS:
+    if message.from_user.id not in ADMINS:
         return await message.reply("Only admins can use this command!")
     
     try:
@@ -27,7 +27,7 @@ async def add_word_handler(client, message):
 
 @Client.on_message(filters.command('removeword') & filters.incoming)
 async def remove_word_handler(client, message):
-    if str(message.from_user.id) not in ADMINS:
+    if message.from_user.id not in ADMINS:
         return await message.reply("Only admins can use this command!")
     
     try:
@@ -43,7 +43,7 @@ async def remove_word_handler(client, message):
 
 @Client.on_message(filters.command('listwords') & filters.incoming)
 async def list_words_handler(client, message):
-    if str(message.from_user.id) not in ADMINS:
+    if message.from_user.id not in ADMINS:
         return await message.reply("Only admins can use this command!")
     
     words = await get_ignore_words()
