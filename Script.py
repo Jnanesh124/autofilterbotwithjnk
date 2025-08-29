@@ -5,7 +5,8 @@
 class script(object):
     START_TXT = """<b><blockquote>ʜᴇʟʟᴏ {} 👋,</blockquote>
     
-ɪ ᴀᴍ ʟᴀᴛᴇꜱᴛ ᴀᴅᴠᴀɴᴄᴇᴅ ᴀɴᴅ ᴘᴏᴡᴇʀꜰᴜʟ ᴀᴜᴛᴏ ꜰɪʟᴛᴇʀ ʙᴏᴛ. ʏᴏᴜ ᴄᴀɴ ᴜꜱᴇ ᴍᴇ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ ᴛᴏ ᴇᴀʀɴ ᴜɴʟɪᴍɪᴛᴇᴅ ᴍᴏɴᴇʏ...💸</b>"""
+i am  movie and webseries file search bot 
+just send ur movie name i will send u file</b>"""
 
     CLONE_START_TXT = """<b><blockquote>ʜᴇʟʟᴏ {}, ᴍʏ ɴᴀᴍᴇ <a href=https://t.me/{}>{}</a></blockquote>
     
@@ -246,7 +247,13 @@ Nᴀᴍᴇ - {}"""
 
     CAPTION = """<b>📂 ғɪʟᴇɴᴀᴍᴇ : {file_name}
 
-<b>⚙️ sɪᴢᴇ : {file_size}</b>""" 
+⚙️ sɪᴢᴇ : {file_size}
+
+◾️◾️◾️◾️◾️◾️◾️◾️◾️◾️◾️◾️◾️
+🔞 Adult t.me/+hLQh-FvQcL0xNWZl
+👀 Main channel @JNK_BACKUP
+🛒 Loots channel @JNKFREELOOTS 
+◾️◾️◾️◾️◾️◾️◾️◾️◾️◾️◾️◾️◾️</b>""" 
 
     IMDB_TEMPLATE_TXT = """
 <b>Query: {qurey}
@@ -752,3 +759,4 @@ Example:- /set_caption 📕 File Name: {filename}
 
 
     
+
