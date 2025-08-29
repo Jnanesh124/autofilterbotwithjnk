@@ -232,12 +232,15 @@ async def save_group_settings(group_id, key, value):
     await db.update_settings(group_id, current)
     
 def get_size(size):
-    units = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB"]
+    """Get size in readable format"""
+    if not size:
+        return "0 B"
+    units = ["B", "KB", "MB", "GB", "TB", "PB", "EB"]
     size = float(size)
     i = 0
-    while size >= 1024.0 and i < len(units):
-        i += 1
+    while size >= 1024.0 and i < len(units) - 1:
         size /= 1024.0
+        i += 1
     return "%.2f %s" % (size, units[i])
 
 def split_list(l, n):
@@ -636,7 +639,7 @@ async def send_all(bot, userid, files, ident, chat_id, user_name, query):
                     protect_content=True if ident == "filep" else False,
                     reply_markup=InlineKeyboardMarkup(
                         [[
-                            InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜᴘ', url=GRP_LNK),
+                            InlineKeyboardButton('Sᴜᴘᴘᴏʀᴛ Gʀᴏᴜp', url=GRP_LNK),
                             InlineKeyboardButton('Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ', url=CHNL_LNK)
                         ],[
                             InlineKeyboardButton("Bᴏᴛ Oᴡɴᴇʀ", url=OWNER_LNK)

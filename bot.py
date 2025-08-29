@@ -9,7 +9,8 @@ from pathlib import Path
 
 # Get logging configurations
 logging.config.fileConfig('logging.conf')
-logging.getLogger().setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("cinemagoer").setLevel(logging.ERROR)
 
@@ -18,8 +19,8 @@ from database.users_chats_db import db
 from info import *
 from utils import temp
 from typing import Union, Optional, AsyncGenerator
-from Script import script 
-from datetime import date, datetime 
+from Script import script
+from datetime import date, datetime
 from aiohttp import web
 from plugins import web_server
 from plugins.clone import restart_bots
@@ -56,10 +57,17 @@ async def start():
     temp.BANNED_USERS = b_users
     temp.BANNED_CHATS = b_chats
     me = await TechVJBot.get_me()
-    temp.BOT = TechVJBot
     temp.ME = me.id
     temp.U_NAME = me.username
     temp.B_NAME = me.first_name
+
+    # Initialize default ignore words
+    try:
+        from word.default_words import initialize_default_words
+        await initialize_default_words()
+    except Exception as e:
+        logger.error(f"Failed to initialize ignore words: {e}")
+
     logging.info(script.LOGO)
     tz = pytz.timezone('Asia/Kolkata')
     today = date.today()
@@ -67,18 +75,21 @@ async def start():
     time = now.strftime("%H:%M:%S %p")
     try:
         await TechVJBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
-    except:
+    except Exception as e:
+        logger.error(f"Failed to send restart message to log channel: {e}")
         print("Make Your Bot Admin In Log Channel With Full Rights")
     for ch in CHANNELS:
         try:
             k = await TechVJBot.send_message(chat_id=ch, text="**Bot Restarted**")
             await k.delete()
-        except:
+        except Exception as e:
+            logger.error(f"Failed to send restart message to channel {ch}: {e}")
             print("Make Your Bot Admin In File Channels With Full Rights")
     try:
         k = await TechVJBot.send_message(chat_id=AUTH_CHANNEL, text="**Bot Restarted**")
         await k.delete()
-    except:
+    except Exception as e:
+        logger.error(f"Failed to send restart message to auth channel: {e}")
         print("Make Your Bot Admin In Force Subscribe Channel With Full Rights")
     if CLONE_MODE == True:
         print("Restarting All Clone Bots.......")
@@ -96,4 +107,3 @@ if __name__ == '__main__':
         loop.run_until_complete(start())
     except KeyboardInterrupt:
         logging.info('Service Stopped Bye 👋')
-

@@ -67,14 +67,13 @@ def clean_file_name(file_name):
 
 def is_file_already_saved(file_id, file_name):
     """Check if the file is already saved in either collection."""
-    found1 = {'file_name': file_name}
-    found = {'file_id': file_id}
+    # Check by file_id first
+    existing_file = col.find_one({'file_id': file_id}) or sec_col.find_one({'file_id': file_id})
+    if existing_file:
+        return True
 
-    for collection in [col, sec_col]:
-        if collection.find_one(found1) or collection.find_one(found):
-            print(f"{file_name} is already saved.")
-            return True
-            
+    # For duplicate file names with different sizes, allow saving
+    # Only check exact file_id match to avoid blocking different quality files
     return False
 
 async def get_search_results(chat_id, query, file_type=None, max_results=10, offset=0, filter=False):
@@ -173,4 +172,3 @@ def unpack_new_file_id(new_file_id):
         )
     )
     return file_id
-    

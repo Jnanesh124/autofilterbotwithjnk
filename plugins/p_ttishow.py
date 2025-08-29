@@ -66,11 +66,14 @@ async def save_group(bot, message):
                 ],[
                     InlineKeyboardButton("Bᴏᴛ Oᴡɴᴇʀ", url=OWNER_LNK)
                 ]]
-                temp.MELCOW['welcome'] = await message.reply_text(
-                    text=(script.MELCOW_ENG.format(u.mention, message.chat.title)),
-                    reply_markup=InlineKeyboardMarkup(button),
-                    parse_mode=enums.ParseMode.HTML
-                )  
+                try:
+                    temp.MELCOW['welcome'] = await message.reply_text(
+                        text=(script.MELCOW_ENG.format(u.mention, message.chat.title)),
+                        reply_markup=InlineKeyboardMarkup(button),
+                        parse_mode=enums.ParseMode.HTML
+                    )
+                except Exception as e:
+                    logging.error(f"Failed to send welcome message: {e}")  
         if settings["auto_delete"]:
             await asyncio.sleep(600)
             await (temp.MELCOW['welcome']).delete()

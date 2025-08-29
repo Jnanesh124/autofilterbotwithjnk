@@ -15,6 +15,7 @@ from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidD
 from utils import get_size, is_subscribed, pub_is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings, get_shortlink, get_tutorial, send_all, get_cap
 from database.users_chats_db import db
 from database.ia_filterdb import get_file_details, get_search_results, get_bad_files
+from database.ignore_words_db import get_ignore_words
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
@@ -863,9 +864,13 @@ async def auto_filter(client, name, msg, reply_msg, ai_search, spoll=False):
             search = search.lower()
             find = search.split(" ")
             search = ""
-            removes = ["in","upload", "series", "full", "horror", "thriller", "mystery", "print", "file"]
+            from database.ignore_words_db import get_ignore_words
+            default_removes = ["in","upload", "series", "full", "horror", "thriller", "mystery", "print", "file"]
+            ignore_words = await get_ignore_words()
+            removes = default_removes + ignore_words
+
             for x in find:
-                if x in removes:
+                if x.lower() in removes:
                     continue
                 else:
                     search = search + x + " "
