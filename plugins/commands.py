@@ -641,11 +641,11 @@ async def delete(bot, message):
         return
     
     try:
-            file_id, file_ref = unpack_new_file_id(media.file_id)
-        except ValueError:
-            # Handle case where unpack_new_file_id returns more than 2 values
-            unpacked = unpack_new_file_id(media.file_id)
-            file_id = unpacked[0] if len(unpacked) > 0 else media.file_id
+        file_id, file_ref = unpack_new_file_id(media.file_id)
+    except ValueError:
+        # Handle case where unpack_new_file_id returns more than 2 values
+        unpacked = unpack_new_file_id(media.file_id)
+        file_id = unpacked[0] if len(unpacked) > 0 else media.file_id
 
     result = col.delete_one({
         'file_id': file_id,
